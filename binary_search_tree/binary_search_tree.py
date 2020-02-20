@@ -12,81 +12,73 @@ class BinarySearchTree:
         self.right = None
 
     # Insert the given value into the tree
+
     def insert(self, value):
-        # if is empty
+        print('insert', self.value)
+        # base case
         if value is None:
-            # Initialize the tree
+            return
+        # base case for vertices
+        elif self.value is None:
             self.value = BinarySearchTree(value)
-        elif value >= self.value:
-            if self.right is None:
-                self.value = BinarySearchTree(value)
-            else:
-                self.right.insert(value)
-        else:
+        # if vertex is less than parent vertex value
+        elif self.value > value:
+            # if vertex left is None (default)
             if self.left is None:
+                # assign tree to left
                 self.left = BinarySearchTree(value)
             else:
                 self.left.insert(value)
-
-    # Return True if the tree contains the value
+        # if vertex is greater than parent vertex value
+        elif self.value <= value:
+            # if vertex right is None (default)
+            if self.right is None:
+                # assign tree to right
+                self.right = BinarySearchTree(value)
+            else:
+                # assess right tree and recurse
+                self.right.insert(value)
+   # Return True if the tree contains the value
     # False if it does not
 
     def contains(self, target):
-        # 1.Case bases
-        while self.value is not None:
-            # target found or none
-            if self.value == target:
-                return True
-            elif self.right == target:
-                return True
-            elif self.left == target:
-                return True
+        if self.value is None:
+            return
+        elif self.value == target:
+            return True
+        else:
+            if self.left is not None and self.right is not None:
+                return self.left.contains(target) or self.right.contains(target)
+            elif self.left is not None:
+                return self.left.contains(target)
+            elif self.right is not None:
+                return self.right.contains(target)
             else:
-                self.contains(target)
+                return
 
-            # 2. Recursive case
-            # Go down lh or rh to find target
-
-            # Return the maximum value found in the tree
-
+    # Return the maximum value found in the tree
     def get_max(self):
-        cur = self
-        # Higher values are to the rh
-        # Could be recursive or a loop
-        while cur.right is not None:
-            cur = cur.right
-        return cur.value
-
-        # ------ Recursive version-------
-        # 1.Base case
-        # if self.right is None:
-        #     return self.value
-        # 2.Recursive
-        # else:
-        #     return self.right.get_max()
+        if self.right is None:
+            return self.value
+        else:
+            return self.right.get_max()
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
-
     def for_each(self, cb):
-        # Calling function on current node
-        cb(self.value)
-        #lh is none / rh is none
-        if self.left is None and self.right:
+        if self.value == None:
+            return
+        else:
             cb(self.value)
-        # 2. recursive by calling for_each(cb) on each side
-        # Go left and right
-        if self.left:
-            self.left.for_each(cb)
-        if self.right:
-            self.right.for_each(cb)
-        # Base case:
-        # since we are not returning anthing we dont need a base case
 
-            # DAY 2 Project -----------------------
-
-            # Print all the values in order from low to high
-            # Hint:  Use a recursive, depth first traversal
+            if self.left is not None and self.right is not None:
+                return self.left.for_each(cb), self.right.for_each(cb)
+            elif self.left is not None:
+                return self.left.for_each(cb)
+            elif self.right is not None:
+                return self.right.for_each(cb)
+            else:
+                return
 
     def in_order_print(self, node):
         pass
