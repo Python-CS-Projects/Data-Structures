@@ -14,7 +14,7 @@ class BinarySearchTree:
     # Insert the given value into the tree
     def insert(self, value):
         # if is empty
-        if self.value is None:
+        if value is None:
             # Initialize the tree
             self.value = BinarySearchTree(value)
         elif value >= self.value:
@@ -24,7 +24,7 @@ class BinarySearchTree:
                 self.right.insert(value)
         else:
             if self.left is None:
-                self.value = BinarySearchTree(value)
+                self.left = BinarySearchTree(value)
             else:
                 self.left.insert(value)
 
@@ -33,15 +33,16 @@ class BinarySearchTree:
 
     def contains(self, target):
         # 1.Case bases
-        # target found or none
-        if self.value == target:
-            return True
-        elif self.right == target:
-            return True
-        elif self.left == target:
-            return True
-        else:
-            self.contains(target)
+        while self.value is not None:
+            # target found or none
+            if self.value == target:
+                return True
+            elif self.right == target:
+                return True
+            elif self.left == target:
+                return True
+            else:
+                self.contains(target)
 
             # 2. Recursive case
             # Go down lh or rh to find target
@@ -49,12 +50,24 @@ class BinarySearchTree:
             # Return the maximum value found in the tree
 
     def get_max(self):
+        cur = self
         # Higher values are to the rh
         # Could be recursive or a loop
-        pass
+        while cur.right is not None:
+            cur = cur.right
+        return cur.value
+
+        # ------ Recursive version-------
+        # 1.Base case
+        # if self.right is None:
+        #     return self.value
+        # 2.Recursive
+        # else:
+        #     return self.right.get_max()
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
+
     def for_each(self, cb):
         # Calling function on current node
         cb(self.value)
@@ -70,16 +83,10 @@ class BinarySearchTree:
         # Base case:
         # since we are not returning anthing we dont need a base case
 
-    def iter_for_each(self, cb):
-        # if is empty return 
-        if self is None:
-            return
-        
+            # DAY 2 Project -----------------------
 
-        # DAY 2 Project -----------------------
-
-        # Print all the values in order from low to high
-        # Hint:  Use a recursive, depth first traversal
+            # Print all the values in order from low to high
+            # Hint:  Use a recursive, depth first traversal
 
     def in_order_print(self, node):
         pass
