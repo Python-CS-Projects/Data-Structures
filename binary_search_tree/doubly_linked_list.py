@@ -144,7 +144,6 @@ class DoublyLinkedList:
             self.tail = None
         elif node.prev is None:  # node is the head
             self.head = node.next  # set the new head
-            # node.next.prev = None
         elif node is self.tail:
             self.tail = node.prev
         node.delete()

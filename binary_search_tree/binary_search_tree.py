@@ -1,7 +1,8 @@
-from dll_stack import Stack
+
 from dll_queue import Queue
+from dll_stack import Stack
 import sys
-sys.path.append('../queue_and_stack')
+sys.path.append('./queue_and_stack')
 
 
 class BinarySearchTree:
@@ -33,12 +34,20 @@ class BinarySearchTree:
     def contains(self, target):
         # 1.Case bases
         # target found or none
+        if self.value == target:
+            return True
+        elif self.right == target:
+            return True
+        elif self.left == target:
+            return True
+        else:
+            self.contains(target)
 
-        # 2. Recursive case
-        # Go down lh or rh to find target
-        pass
+            # 2. Recursive case
+            # Go down lh or rh to find target
 
-    # Return the maximum value found in the tree
+            # Return the maximum value found in the tree
+
     def get_max(self):
         # Higher values are to the rh
         # Could be recursive or a loop
@@ -47,18 +56,31 @@ class BinarySearchTree:
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
     def for_each(self, cb):
-
-        # Base case:
+        # Calling function on current node
+        cb(self.value)
         #lh is none / rh is none
-
-        # recursive
+        if self.left is None and self.right:
+            cb(self.value)
+        # 2. recursive by calling for_each(cb) on each side
         # Go left and right
-        pass
+        if self.left:
+            self.left.for_each(cb)
+        if self.right:
+            self.right.for_each(cb)
+        # Base case:
+        # since we are not returning anthing we dont need a base case
 
-    # DAY 2 Project -----------------------
+    def iter_for_each(self, cb):
+        # if is empty return 
+        if self is None:
+            return
+        
 
-    # Print all the values in order from low to high
-    # Hint:  Use a recursive, depth first traversal
+        # DAY 2 Project -----------------------
+
+        # Print all the values in order from low to high
+        # Hint:  Use a recursive, depth first traversal
+
     def in_order_print(self, node):
         pass
 

@@ -33,7 +33,7 @@ class LRUCache:
             node = self.storage[key]
         # move value to the tail as recently used
             self.order.move_to_front(node)
-            return node
+            return node.value
         else:
             return None
 
@@ -51,17 +51,37 @@ class LRUCache:
     # THE OLDEST GOES TO ?? WHICH CAN POTENTIALLY BE OVERWRITTEN IF NO SPACE
 
     def set(self, key, value):
+        # if item already in cache
+
         if key in self.storage.keys():
-            self.order.move_to_front(value)
+            # If the key is in the dic but the value is different
+            if self.storage[key].value != value:
+                # delete from dic
+                node = self.storage[key]
+                self.order.delete(node)
+                # Add to head
+                self.order.add_to_head(value)
+                # Overwrite with new value
+                self.storage[key] = value
 
+            else:
+                self.order.move_to_front(value)
         # if not full add to tail and substract from limit 10
-        elif self.size < self.limit:
-
-            self.order.add_to_head(value)
-            self.storage[key] = self.order.head
-            self.size += 1
-         # if the chache is full remove from head and add value to tail
         else:
-            self.storage[key] = value
-            self.order.remove_from_tail()
-            self.order.add_to_head(value)
+            if self.size < self.limit:
+                # Add to head
+                self.order.add_to_head(value)
+                # Add to dic
+                self.storage[key] = value
+                # update size
+                self.size += 1
+            # if the chache is full remove from head and add value to tail
+            else:
+                # Remove from tail
+                deleted = self.order.remove_from_tail()
+                # remove from dic
+                del self.storage[deleted]
+                # Add new value to head
+                self.order.add_to_head(value)
+                # Add new value to dic
+                self.storage[key] = value
