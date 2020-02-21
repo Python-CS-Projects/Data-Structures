@@ -29,11 +29,13 @@ class LRUCache:
     # SO THE RECENTLY USE GOES TO ??
 
     def get(self, key):
+        # if the key is in the dic move it to the end
         if key in self.storage:
             node = self.storage[key]
         # move value to the tail as recently used
-            self.order.move_to_front(node)
+            self.order.move_to_end(node)
             return node.value
+        # else return none because the ley was not found
         else:
             return None
 
@@ -51,37 +53,29 @@ class LRUCache:
     # THE OLDEST GOES TO ?? WHICH CAN POTENTIALLY BE OVERWRITTEN IF NO SPACE
 
     def set(self, key, value):
-        # if item already in cache
-
-        if key in self.storage.keys():
-            # If the key is in the dic but the value is different
-            if self.storage[key].value != value:
-                # delete from dic
-                node = self.storage[key]
-                self.order.delete(node)
-                # Add to head
-                self.order.add_to_head(value)
-                # Overwrite with new value
-                self.storage[key] = value
-
-            else:
-                self.order.move_to_front(value)
-        # if not full add to tail and substract from limit 10
+        # if the key already exist
+        if key in self.storage:
+            # get the value
+            node = self.storage[key]
+            # overwrite the value with the new value
+            node.value = value
+            # now we move it to the end as the most recent
+            self.order.move_to_end(node)
+        # if the key does not yet exist in the storage
         else:
-            if self.size < self.limit:
-                # Add to head
-                self.order.add_to_head(value)
-                # Add to dic
-                self.storage[key] = value
-                # update size
-                self.size += 1
-            # if the chache is full remove from head and add value to tail
-            else:
-                # Remove from tail
-                deleted = self.order.remove_from_tail()
-                # remove from dic
-                del self.storage[deleted]
-                # Add new value to head
-                self.order.add_to_head(value)
-                # Add new value to dic
-                self.storage[key] = value
+            # if the lenght of the diccionary is equal to the limit 10
+            if len(self.order) == self.limit:
+                # here we iterate over the diccionary
+                for name in self.storage:
+                    # Find the value in the DLL
+                    if self.storage[name] is self.order.head:
+                        # Delete current head from Diccionary/Storage
+                        del self.storage[name]
+                        # Terminate
+                        break
+                # Delete the head from the DLL
+                self.order.remove_from_head()
+            # If the dic/storage is not yet full add the new value as most recent in the DLL
+            self.order.add_to_tail(value)
+            # add to the dic/storage tail
+            self.storage[key] = self.order.tail
